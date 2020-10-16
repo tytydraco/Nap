@@ -6,7 +6,13 @@ import android.widget.Toast
 class NapTileService: TileService() {
     override fun onClick() {
         super.onClick()
-        val process = ProcessBuilder("su", "-c", "input keyevent KEYCODE_POWER").start()
+        val process = ProcessBuilder(
+            "su", "-c",
+            "sendevent /dev/input/event0 1 116 1 &&" + 
+            "sendevent /dev/input/event0 0 0 0 &&" +
+            "sendevent /dev/input/event0 1 116 0 &&" +
+            "sendevent /dev/input/event0 0 0 0"
+        ).start()
         process.waitFor()
 
         if (process.exitValue() != 0)
